@@ -1,24 +1,7 @@
+version: ~> 1.0
+
 language: python
 dist: xenial
-matrix:
-  include:
-    - python: "2.7"
-      env: YAJL_VERSION=1.0.12
-    - python: "2.7"
-    - python: "3.4"
-      env: YAJL_VERSION=1.0.9
-    - python: "3.4"
-    - python: "3.5"
-      env: UPLOAD_C_COVERAGE=yes
-    - python: "3.5"
-      env: YAJL_VERSION=cant_find_it
-    - python: "3.6"
-    - python: "3.7"
-    - python: "3.7"
-      env: YAJL_VERSION=none
-    - python: "3.8"
-    - python: "3.9-dev"
-    - python: "pypy"
 addons:
   apt:
     packages: [libyajl-dev]
@@ -52,3 +35,79 @@ after_success:
      pip install coveralls
      coveralls
    fi
+
+stages:
+  - test
+  - buildwheels
+
+env:
+  global:
+    - CIBW_SKIP="cp27-win*"
+    - CIBW_TEST_REQUIRES=pytest cffi
+    - CIBW_BEFORE_ALL="bash -c 'cmake --help || yum install -y cmake; cd \"{project}\"; sh .github/tools/install_yajl.sh'"
+    - CIBW_TEST_COMMAND="bash -c 'cd \"{project}\"; pytest -vv'"
+    - CIBW_ENVIRONMENT_WINDOWS="IJSON_EMBED_YAJL=1"
+    - TWINE_USERNAME=__token__
+
+_cibuildwheel: &cibuildwheel
+  stage: buildwheels
+  install:
+    - python3 -m pip install cibuildwheel==1.6.1
+  script:
+    # build the wheels, put them into './wheelhouse'
+    - python3 -m cibuildwheel --output-dir wheelhouse
+  after_success:
+    # if the release was tagged, upload them to PyPI
+    - |
+      if [[ -n "$TRAVIS_TAG" ]]; then
+        python3 -m pip install twine
+        python3 -m twine upload wheelhouse/*.whl
+      fi
+
+jobs:
+  include:
+    # test
+    - python: "2.7"
+      env: YAJL_VERSION=1.0.12
+    - python: "2.7"
+    - python: "3.4"
+      env: YAJL_VERSION=1.0.9
+    - python: "3.4"
+    - python: "3.5"
+      env: UPLOAD_C_COVERAGE=yes
+    - python: "3.5"
+      env: YAJL_VERSION=cant_find_it
+    - python: "3.6"
+    - python: "3.7"
+    - python: "3.7"
+      env: YAJL_VERSION=none
+    - python: "3.8"
+    - python: "3.9-dev"
+    - python: "pypy"
+
+    #build wheels
+    - name: linux wheels build
+      <<: *cibuildwheel
+      services: docker
+    # perform a linux arm64 build
+    - name: linux arm64 wheels build
+      <<: *cibuildwheel
+      services: docker
+      arch: arm64
+      group: edge
+      virt: lxd
+    # and a mac build
+    - name: mac wheels build
+      <<: *cibuildwheel
+      os: osx
+      language: shell
+    # and a windows build
+    - name: windows wheels build
+      <<: *cibuildwheel
+      os: windows
+      language: shell
+      before_install:
+        - choco install python --version 3.8.0
+        - export PATH="/c/Python38:/c/Python38/Scripts:$PATH"
+        # make sure it's on PATH as 'python3'
+        - ln -s /c/Python38/python.exe /c/Python38/python3.exe
