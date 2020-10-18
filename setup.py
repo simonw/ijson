@@ -23,7 +23,7 @@ setupArgs = dict(
     author_email = 'rtobar@icrar.org, maniac@softwaremaniacs.org',
     url = 'https://github.com/ICRAR/ijson',
     license = 'BSD',
-    description = 'Iterative JSON parser with a standard Python iterator interface',
+    description = 'Iterative JSON parser with standard Python iterator interfaces',
     long_description = open('README.rst').read(),
     long_description_content_type = 'text/x-rst',
 
