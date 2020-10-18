@@ -1,5 +1,12 @@
 # Changelog
 
+## Development version
+
+* Moved binary wheel generation
+  from GitHub Actions to Travis.
+  This gained us binary ARM wheels,
+  wihch are becoming increasingly popular (#35)
+
 ## [3.1.2]
 
 * Fixed minor memory leaks
