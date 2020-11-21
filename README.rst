@@ -540,6 +540,8 @@ FAQ
      found after the end of the top-level JSON object.
      When using ``use_float=True`` it also doesn't properly support
      values greater than 2^32 in 32-bit platforms or Windows.
+     Numbers with leading zeros are not reported as invalid
+     (although they are invalid JSON numbers).
 
    * The ``python`` backend doesn't support ``allow_comments=True``
      It also internally works with ``str`` objects, not ``bytes``,
