@@ -1,5 +1,16 @@
 # Changelog
 
+## Development version
+
+* Python backed correctly raises errors
+  when JSON numbers with leading zeros
+  are found in the stream (#40).
+* Likewise, JSON numbers with fractions
+  where the decimal point is not surrounded
+  by at least one digit on both sides
+  also produce an error now
+  on the python backend.
+
 ## [3.1.2.post0]
 
 * Moved binary wheel generation
