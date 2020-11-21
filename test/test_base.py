@@ -447,6 +447,23 @@ class IJsonTestsBase(object):
         except common.JSONError:
             pass
 
+    def test_invalid_numbers(self):
+        # leading zeros
+        if self.detects_leading_zeros:
+            for case in (b'00',   b'01',   b'001'):
+                for base in (case, case + b'.0', case + b'e0', case + b'E0'):
+                    for n in (base, b'-' + base):
+                        with self.assertRaises(common.JSONError):
+                            self.get_all(self.basic_parse, n)
+        # incomplete exponents
+        for n in (b'1e', b'0.1e', b'0E'):
+            with self.assertRaises(common.JSONError):
+                self.get_all(self.basic_parse, n)
+        # incomplete fractions
+        for n in (b'1.', b'.1'):
+            with self.assertRaises(common.JSONError):
+                self.get_all(self.basic_parse, n)
+
     def test_incomplete(self):
         for json in INCOMPLETE_JSONS:
             with self.assertRaises(common.IncompleteJSONError):
@@ -556,6 +573,7 @@ def generate_test_cases(module, classname, method_suffix, *bases):
             'get_first': lambda self, *args, **kwargs: module['get_first'](*args, **kwargs),
             'supports_multiple_values': name != 'yajl',
             'supports_comments': name != 'python',
+            'detects_leading_zeros': name != 'yajl',
         }
         return generate_backend_specific_tests(module, classname, method_suffix,
                                                members=members, *_bases)
