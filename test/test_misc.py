@@ -53,6 +53,13 @@ class MainEntryPoints(object):
         results = get_all(routine, JSON, *args, **kwargs)
         self.assertEqual(expected_results, results)
 
+    def _assert_async_types_coroutine(self, expected_results, routine, *args, **kwargs):
+        if not compat.IS_PY35:
+            return
+        from ._test_async_types_coroutine import get_all
+        results = get_all(routine, JSON, *args, **kwargs)
+        self.assertEqual(expected_results, results)
+
     def _assert_events(self, expected_results, previous_routine, routine, *args, **kwargs):
         events = previous_routine(compat.BytesIO(JSON))
         # Using a different generator to make the point that we can chain
@@ -71,6 +78,7 @@ class MainEntryPoints(object):
         self._assert_unicode(expected_results, routine, *args, **kwargs)
         self._assert_file(expected_results, routine, *args, **kwargs)
         self._assert_async_file(expected_results, routine, *args, **kwargs)
+        self._assert_async_types_coroutine(expected_results, routine, *args, **kwargs)
         if previous_routine:
             self._assert_events(expected_results, previous_routine, routine, *args, **kwargs)
 
