@@ -1,6 +1,6 @@
 # Changelog
 
-## Development version
+## [3.1.3]
 
 * Python backed correctly raises errors
   when JSON numbers with leading zeros
@@ -268,3 +268,4 @@
 [3.1.1]: https://github.com/ICRAR/ijson/releases/tag/v3.1.1
 [3.1.2]: https://github.com/ICRAR/ijson/releases/tag/v3.1.2
 [3.1.2.post0]: https://github.com/ICRAR/ijson/releases/tag/v3.1.2.post0
+[3.1.3]: https://github.com/ICRAR/ijson/releases/tag/v3.1.3
