@@ -10,6 +10,16 @@
   by at least one digit on both sides
   also produce an error now
   on the python backend.
+* Fixed detection of file objects
+  with generator-based ``read`` coroutines
+  (i.e., a ``read`` generator decorated with ``@types.coroutine``)
+  for the purpose of automatically routing user calls
+  done through the main entry points.
+  For example, when using ``aiofiles`` objects
+  users could invoke ``async for item in ijson.parse_async(f)``
+  but not ``async for item in ijson.parse(f)``,
+  while the latter has been possible since 3.1
+  for native coroutines.
 
 ## [3.1.2.post0]
 
