@@ -287,10 +287,21 @@ def _make_kvitems_coro(backend):
     return kvitems_coro
 
 
-def is_async_file(x):
-    """True if x has an asynchronous `read` method"""
-    return compat.IS_PY35 and hasattr(x, 'read') and inspect.iscoroutinefunction(x.read)
+def is_awaitablefunction(func):
+    """True if `func` is an awaitable function"""
+    return (
+        inspect.iscoroutinefunction(func) or (
+          inspect.isgeneratorfunction(func) and
+          (func.__code__.co_flags & inspect.CO_ITERABLE_COROUTINE)
+        )
+    )
 
+def is_async_file(f):
+    """True if `f` has an asynchronous `read` method"""
+    return (
+        compat.IS_PY35 and hasattr(f, 'read') and
+        is_awaitablefunction(f.read)
+    )
 
 def is_file(x):
     """True if x has a `read` method"""
