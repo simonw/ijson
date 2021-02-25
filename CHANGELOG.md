@@ -1,5 +1,11 @@
 # Changelog
 
+## Development version
+
+* Python backend raises errors on incomplete JSON content
+  that previously wasn't recognised as such,
+  aligning itself with the rest of the backends (#42).
+
 ## [3.1.3]
 
 * Python backed correctly raises errors

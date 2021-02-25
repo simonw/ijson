@@ -226,6 +226,8 @@ def parse_value(target, multivalue, use_float):
                     if number == inf:
                         raise common.JSONError("float overflow: %s" % (symbol,))
                 except:
+                    if 'true'.startswith(symbol) or 'false'.startswith(symbol) or 'null'.startswith(symbol):
+                        raise common.IncompleteJSONError('Incomplete JSON content')
                     raise UnexpectedSymbol(symbol, pos)
                 else:
                     send(('number', number))

@@ -542,6 +542,8 @@ FAQ
      values greater than 2^32 in 32-bit platforms or Windows.
      Numbers with leading zeros are not reported as invalid
      (although they are invalid JSON numbers).
+     Incomplete JSON tokens at the end of an incomplete document
+     (e.g., ``{"a": fals``) are not reported as ``IncompleteJSONError``.
 
    * The ``python`` backend doesn't support ``allow_comments=True``
      It also internally works with ``str`` objects, not ``bytes``,

@@ -237,6 +237,38 @@ INCOMPLETE_JSONS = [
     b'{"key": "value"',
     b'{"key": "value",',
 ]
+INCOMPLETE_JSON_TOKENS = [
+    b'n',
+    b'nu',
+    b'nul',
+    b't',
+    b'tr',
+    b'tru',
+    b'f',
+    b'fa',
+    b'fal',
+    b'fals',
+    b'[f',
+    b'[fa',
+    b'[fal',
+    b'[fals',
+    b'[t',
+    b'[tr',
+    b'[tru',
+    b'[n',
+    b'[nu',
+    b'[nul',
+    b'{"key": t',
+    b'{"key": tr',
+    b'{"key": tru',
+    b'{"key": f',
+    b'{"key": fa',
+    b'{"key": fal',
+    b'{"key": fals',
+    b'{"key": n',
+    b'{"key": nu',
+    b'{"key": nul',
+]
 STRINGS_JSON = br'''
 {
     "str1": "",
@@ -469,6 +501,13 @@ class IJsonTestsBase(object):
             with self.assertRaises(common.IncompleteJSONError):
                 self.get_all(self.basic_parse, json)
 
+    def test_incomplete_tokens(self):
+        if not self.handles_incomplete_json_tokens:
+            return
+        for json in INCOMPLETE_JSON_TOKENS:
+            with self.assertRaises(common.IncompleteJSONError):
+                self.get_all(self.basic_parse, json)
+
     def test_invalid(self):
         for json in INVALID_JSONS:
             # Yajl1 doesn't complain about additional data after the end
@@ -574,6 +613,7 @@ def generate_test_cases(module, classname, method_suffix, *bases):
             'supports_multiple_values': name != 'yajl',
             'supports_comments': name != 'python',
             'detects_leading_zeros': name != 'yajl',
+            'handles_incomplete_json_tokens': name != 'yajl'
         }
         return generate_backend_specific_tests(module, classname, method_suffix,
                                                members=members, *_bases)
