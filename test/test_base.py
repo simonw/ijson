@@ -374,6 +374,18 @@ class IJsonTestsBase(object):
         self.assertEqual(2, len(ids))
         self.assertListEqual([-2,-1], sorted(ids))
 
+    def test_items_with_dotted_name(self):
+        json = b'{"0.1": 0}'
+        self.assertListEqual([0], self.get_all(self.items, json, '0.1'))
+        json = b'{"0.1": [{"a.b": 0}]}'
+        self.assertListEqual([0], self.get_all(self.items, json, '0.1.item.a.b'))
+        json = b'{"0.1": 0, "0": {"1": 1}}'
+        self.assertListEqual([0, 1], self.get_all(self.items, json, '0.1'))
+        json = b'{"abc.def": 0}'
+        self.assertListEqual([0], self.get_all(self.items, json, 'abc.def'))
+        self.assertListEqual([], self.get_all(self.items, json, 'abc'))
+        self.assertListEqual([], self.get_all(self.items, json, 'def'))
+
     def test_map_type(self):
         obj = self.get_first(self.items, JSON, '')
         self.assertTrue(isinstance(obj, dict))
