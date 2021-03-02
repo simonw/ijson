@@ -1,6 +1,6 @@
 # Changelog
 
-## Development version
+## [3.1.4]
 
 * Fixed bug in ``yajl2_c`` backend introduced in 3.1.0
   where ``ijson.items`` didn't work correctly
@@ -278,3 +278,4 @@
 [3.1.2]: https://github.com/ICRAR/ijson/releases/tag/v3.1.2
 [3.1.2.post0]: https://github.com/ICRAR/ijson/releases/tag/v3.1.2.post0
 [3.1.3]: https://github.com/ICRAR/ijson/releases/tag/v3.1.3
+[3.1.4]: https://github.com/ICRAR/ijson/releases/tag/v3.1.4
