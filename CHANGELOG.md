@@ -1,5 +1,13 @@
 # Changelog
 
+## Development version
+
+* New ``ijson.dump`` command-line utility
+  for simple inspection of the ijson iteration process.
+  This tool should be useful for new users
+  who are usually confused with how to use the library,
+  and the prefix in particular.
+
 ## [3.1.4]
 
 * Fixed bug in ``yajl2_c`` backend introduced in 3.1.0

@@ -143,6 +143,38 @@ using the ``basic_parse`` function:
                     if event == 'map_key' and value == 'name')
 
 
+.. _command_line:
+
+Command line
+------------
+
+A command line utility is included with ijson
+to help visualise the output of each of the routines above.
+It reads JSON from the standard input,
+and it prints the results of the parsing method chosen by the user
+to the standard output.
+
+The tool is available by running the ``ijson.dump`` module.
+For example::
+
+ $> echo '{"A": 0, "B": [1, 2, 3, 4]}' | python -m ijson.dump -m parse
+ #: path, name, value
+ --------------------
+ 0: , start_map, None
+ 1: , map_key, A
+ 2: A, number, 0
+ 3: , map_key, B
+ 4: B, start_array, None
+ 5: B.item, number, 1
+ 6: B.item, number, 2
+ 7: B.item, number, 3
+ 8: B.item, number, 4
+ 9: B, end_array, None
+ 10: , end_map, None
+
+Using ``-h/--help`` will show all available options.
+
+
 ``bytes``/``str`` support
 -------------------------
 
