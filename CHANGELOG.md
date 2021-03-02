@@ -2,6 +2,9 @@
 
 ## Development version
 
+* Fixed bug in ``yajl2_c`` backend introduced in 3.1.0
+  where ``ijson.items`` didn't work correctly
+  against member names containing ``.`` (#41).
 * Python backend raises errors on incomplete JSON content
   that previously wasn't recognised as such,
   aligning itself with the rest of the backends (#42).

@@ -32,17 +32,15 @@ static int itemsasync_init(ItemsAsync *self, PyObject *args, PyObject *kwargs)
 {
 	PyObject *reading_args = PySequence_GetSlice(args, 0, 2);
 	PyObject *items_args = PySequence_GetSlice(args, 2, 4);
-	PyObject *parse_args = PyTuple_Pack(1, Py_False);
 	pipeline_node coro_pipeline[] = {
 		{&ItemsBasecoro_Type, items_args, NULL},
-		{&ParseBasecoro_Type, parse_args, NULL},
+		{&ParseBasecoro_Type, NULL, NULL},
 		{&BasicParseBasecoro_Type, NULL, kwargs},
 		{NULL}
 	};
 	M1_N(self->reading_generator = (async_reading_generator *)PyObject_CallObject((PyObject *)&AsyncReadingGeneratorType, reading_args));
 	async_reading_generator_add_coro(self->reading_generator, coro_pipeline);
 	Py_DECREF(items_args);
-	Py_DECREF(parse_args);
 	Py_DECREF(reading_args);
 	return 0;
 }

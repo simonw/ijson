@@ -32,16 +32,14 @@ static int kvitemsasync_init(KVItemsAsync *self, PyObject *args, PyObject *kwarg
 {
 	PyObject *reading_args = PySequence_GetSlice(args, 0, 2);
 	PyObject *kvitems_args = PySequence_GetSlice(args, 2, 4);
-	PyObject *parse_args = PyTuple_Pack(1, Py_False);
 	pipeline_node coro_pipeline[] = {
 		{&KVItemsBasecoro_Type, kvitems_args, NULL},
-		{&ParseBasecoro_Type, parse_args, NULL},
+		{&ParseBasecoro_Type, NULL, NULL},
 		{&BasicParseBasecoro_Type, NULL, kwargs},
 		{NULL}
 	};
 	M1_N(self->reading_generator = (async_reading_generator *)PyObject_CallObject((PyObject *)&AsyncReadingGeneratorType, reading_args));
 	async_reading_generator_add_coro(self->reading_generator, coro_pipeline);
-	Py_DECREF(parse_args);
 	Py_DECREF(kvitems_args);
 	Py_DECREF(reading_args);
 	return 0;

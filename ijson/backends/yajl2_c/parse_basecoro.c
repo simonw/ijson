@@ -19,21 +19,16 @@
  */
 static int parse_basecoro_init(ParseBasecoro *self, PyObject *args, PyObject *kwargs)
 {
-	PyObject *join_path = Py_True;
-	M1_Z(PyArg_ParseTuple(args, "O|O", &self->target_send, &join_path));
+	M1_Z(PyArg_ParseTuple(args, "O", &self->target_send));
 	Py_INCREF(self->target_send);
 	M1_N(self->path = PyList_New(0));
-	self->join_path = PyObject_IsTrue(join_path);
-	assert(self->join_path ||
-	       (KVItemsBasecoro_Check(self->target_send) || ItemsBasecoro_Check(self->target_send)));
 
-	if (self->join_path) {
-		PyObject *empty;
-		M1_N(empty = STRING_FROM_UTF8("", 0));
-		int res = PyList_Append(self->path, empty);
-		Py_DECREF(empty);
-		M1_M1(res);
-	}
+	PyObject *empty;
+	M1_N(empty = STRING_FROM_UTF8("", 0));
+	int res = PyList_Append(self->path, empty);
+	Py_DECREF(empty);
+	M1_M1(res);
+
 	return 0;
 }
 
@@ -51,8 +46,9 @@ static void parse_basecoro_dealloc(ParseBasecoro *self)
 		N_N(tgt); \
 	} while(0);
 
-static PyObject *_send_impl_joint_path(ParseBasecoro *gen, PyObject *event, PyObject *value)
+PyObject* parse_basecoro_send_impl(PyObject *self, PyObject *event, PyObject *value)
 {
+	ParseBasecoro *gen = (ParseBasecoro *)self;
 	Py_ssize_t npaths = PyList_Size(gen->path);
 
 	// Calculate current prefix
@@ -110,58 +106,19 @@ static PyObject *_send_impl_joint_path(ParseBasecoro *gen, PyObject *event, PyOb
 		N_M1(PyList_Append(gen->path, Py_None));
 	}
 
-	PyObject *res = PyTuple_Pack(3, prefix, event, value);
-	CORO_SEND(gen->target_send, res);
-	Py_DECREF(res);
-	Py_DECREF(prefix);
-	Py_RETURN_NONE;
-}
-
-static PyObject *_to_next_coro(ParseBasecoro *gen, PyObject *path, PyObject *event, PyObject *value)
-{
 	if (KVItemsBasecoro_Check(gen->target_send)) {
-		return kvitems_basecoro_send_impl(gen->target_send, path, event, value);
+		kvitems_basecoro_send_impl(gen->target_send, prefix, event, value);
 	}
-	return items_basecoro_send_impl(gen->target_send, path, event, value);
-}
-
-static PyObject *_send_impl(ParseBasecoro *gen, PyObject *event, PyObject *value)
-{
-	if (event == enames.end_array_ename || event == enames.end_map_ename) {
-		Py_ssize_t npaths = PyList_Size(gen->path);
-		N_M1(PyList_SetSlice(gen->path, npaths - 1, npaths, NULL));
-		N_N(_to_next_coro(gen, gen->path, event, value));
-	}
-	else if (event == enames.start_array_ename) {
-		N_N(_to_next_coro(gen, gen->path, event, value));
-		N_M1(PyList_Append(gen->path, item));
-	}
-	else if (event == enames.start_map_ename) {
-		N_N(_to_next_coro(gen, gen->path, event, value));
-		Py_INCREF(Py_None);
-		N_M1(PyList_Append(gen->path, Py_None));
-	}
-	else if (event == enames.map_key_ename) {
-		Py_ssize_t npaths = PyList_Size(gen->path);
-		PyObject *path = PyList_GetSlice(gen->path, 0, npaths - 1);
-		N_N(_to_next_coro(gen, path, event, value));
-		Py_DECREF(path);
-		Py_INCREF(value);
-		N_M1(PyList_SetItem(gen->path, npaths - 1, value));
+	else if (ItemsBasecoro_Check(gen->target_send)) {
+		items_basecoro_send_impl(gen->target_send, prefix, event, value);
 	}
 	else {
-		N_N(_to_next_coro(gen, gen->path, event, value));
+		PyObject *res = PyTuple_Pack(3, prefix, event, value);
+		CORO_SEND(gen->target_send, res);
+		Py_DECREF(res);
 	}
+	Py_DECREF(prefix);
 	Py_RETURN_NONE;
-}
-
-PyObject* parse_basecoro_send_impl(PyObject *self, PyObject *event, PyObject *value)
-{
-	ParseBasecoro *gen = (ParseBasecoro *)self;
-	if (gen->join_path) {
-		return _send_impl_joint_path(gen, event, value);
-	}
-	return _send_impl(gen, event, value);
 }
 
 static PyObject* parse_basecoro_send(PyObject *self, PyObject *tuple)
