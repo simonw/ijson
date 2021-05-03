@@ -227,6 +227,10 @@ Note that this interception
 only makes sense for the ``basic_parse -> parse``,
 ``parse -> items`` and ``parse -> kvitems`` interactions.
 
+Note also that event interception
+is currently not supported
+by the ``async`` functions.
+
 
 Push interfaces
 ---------------
