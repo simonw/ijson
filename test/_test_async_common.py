@@ -2,9 +2,6 @@
 
 import asyncio
 import contextlib
-import io
-
-from ijson import compat
 
 
 def _aiorun(f):

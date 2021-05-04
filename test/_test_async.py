@@ -1,7 +1,6 @@
 # -*- coding:utf-8 -*-
 
 import asyncio
-import contextlib
 import io
 
 from ijson import compat

@@ -1,7 +1,5 @@
 # -*- coding:utf-8 -*-
 
-import asyncio
-import contextlib
 import io
 import types
 
