@@ -84,7 +84,6 @@ jobs:
       env: YAJL_VERSION=none
     - python: "3.8"
     - python: "3.9-dev"
-    - python: "pypy"
 
     #build wheels
     - name: linux wheels build
