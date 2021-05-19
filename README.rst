@@ -251,7 +251,7 @@ before full item parsing:
       prefix, event, value = next(parse_event)
       if value == "skip":
           break
-  for obj in ijson.items(parse_events, 'item')
+  for obj in ijson.items(parse_events, 'item'):
       print(obj)
 
 
