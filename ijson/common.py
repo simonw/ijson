@@ -136,12 +136,19 @@ class ObjectBuilder(object):
             self.containers[-1](value)
 
 
+def _normalize_prefix(prefix):
+    if isinstance(prefix, compat.bytetype):
+        return compat.b2s(prefix)
+    return prefix
+
+
 @utils.coroutine
 def items_basecoro(target, prefix, map_type=None):
     '''
     An couroutine dispatching native Python objects constructed from the events
     under a given prefix.
     '''
+    prefix = _normalize_prefix(prefix)
     while True:
         current, event, value = (yield)
         if current == prefix:
@@ -168,6 +175,7 @@ def kvitems_basecoro(target, prefix, map_type=None):
     under a given prefix. The prefix should point to JSON objects
     '''
     builder = None
+    prefix = _normalize_prefix(prefix)
     while True:
         path, event, value = (yield)
         while path == prefix and event == 'map_key':

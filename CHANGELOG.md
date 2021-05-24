@@ -7,6 +7,9 @@
   This tool should be useful for new users
   who are usually confused with how to use the library,
   and the prefix in particular.
+* Prefixes given to ``kvitems`` and ``items``
+  can now be ``bytes`` in python 3,
+  which are decoded as ``utf-8`` strings.
 
 ## [3.1.4]
 

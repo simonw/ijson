@@ -368,6 +368,10 @@ class IJsonTestsBase(object):
         events = self.get_all(self.items, JSON, '')
         self.assertEqual(events, [JSON_OBJECT])
 
+    def test_items_with_bytes_prefix(self):
+        events = self.get_all(self.items, JSON, b'')
+        self.assertEqual(events, [JSON_OBJECT])
+
     def test_items_twodictlevels(self):
         json = b'{"meta":{"view":{"columns":[{"id": -1}, {"id": -2}]}}}'
         ids = self.get_all(self.items, json, 'meta.view.columns.item.id')
@@ -394,6 +398,10 @@ class IJsonTestsBase(object):
 
     def test_kvitems(self):
         kvitems = self.get_all(self.kvitems, JSON, 'docs.item')
+        self.assertEqual(JSON_KVITEMS, kvitems)
+
+    def test_kvitems_with_bytes_prefix(self):
+        kvitems = self.get_all(self.kvitems, JSON, b'docs.item')
         self.assertEqual(JSON_KVITEMS, kvitems)
 
     def test_kvitems_toplevel(self):

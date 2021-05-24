@@ -43,27 +43,33 @@ def parse_async(file, **kwargs):
 
 @utils.coroutine
 def kvitems_basecoro(target, prefix, map_type=None, **kwargs):
+    prefix = common._normalize_prefix(prefix)
     return _yajl2.kvitems_basecoro(target.send, prefix, map_type, **kwargs)
 
 def kvitems_gen(file, prefix, map_type=None, **kwargs):
     f = compat.bytes_reader(file)
+    prefix = common._normalize_prefix(prefix)
     buf_size = _get_buf_size(kwargs)
     return _yajl2.kvitems(f, buf_size, prefix, map_type, **kwargs)
 
 def kvitems_async(file, prefix, map_type=None, **kwargs):
+    prefix = common._normalize_prefix(prefix)
     buf_size = _get_buf_size(kwargs)
     return _yajl2.kvitems_async(file, buf_size, prefix, map_type, **kwargs)
 
 @utils.coroutine
 def items_basecoro(target, prefix, map_type=None, **kwargs):
+    prefix = common._normalize_prefix(prefix)
     return _yajl2.items_basecoro(target.send, prefix, map_type, **kwargs)
 
 def items_gen(file, prefix, map_type=None, **kwargs):
     f = compat.bytes_reader(file)
+    prefix = common._normalize_prefix(prefix)
     buf_size = _get_buf_size(kwargs)
     return _yajl2.items(f, buf_size, prefix, map_type, **kwargs)
 
 def items_async(file, prefix, map_type=None, **kwargs):
+    prefix = common._normalize_prefix(prefix)
     buf_size = _get_buf_size(kwargs)
     return _yajl2.items_async(file, buf_size, prefix, map_type, **kwargs)
 
