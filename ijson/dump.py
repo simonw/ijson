@@ -26,12 +26,16 @@ def dump():
     parser.add_argument('-m', '--method', choices=['basic_parse', 'parse', 'kvitems', 'items'],
                         help='The method to use for dumping', default='basic_parse')
     parser.add_argument('-p', '--prefix', help='Prefix (used with -M items|kvitems)', default='')
+    parser.add_argument('-M', '--multiple-values', help='Allow multiple values', action='store_true')
     args = parser.parse_args()
 
     method = getattr(ijson, args.method)
     method_args = ()
+    method_kwargs = {}
     if args.method in ('items', 'kvitems'):
         method_args = args.prefix,
+    if args.multiple_values:
+        method_kwargs['multiple_values'] = True
     header = '#: ' + HEADERS[args.method]
     print(header)
     print('-' * len(header))
@@ -41,7 +45,7 @@ def dump():
     if hasattr(stdin, 'buffer'):
         stdin = stdin.buffer
 
-    enumerated_results = enumerate(method(stdin, *method_args))
+    enumerated_results = enumerate(method(stdin, *method_args, **method_kwargs))
     if args.method == 'items':
         for i, result in enumerated_results:
             print('%i: %s' % (i, result))
