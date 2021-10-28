@@ -119,7 +119,7 @@ PyTypeObject KVItemsBasecoro_Type = {
 #endif
 	.tp_basicsize = sizeof(KVItemsBasecoro),
 	.tp_name = "_yajl2.kvitems_basecoro",
-	.tp_doc = "Coroutine dispathing (key, value) tuples",
+	.tp_doc = "Coroutine dispatching (key, value) tuples",
 	.tp_init = (initproc)kvitems_basecoro_init,
 	.tp_dealloc = (destructor)kvitems_basecoro_dealloc,
 	.tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_HAVE_ITER,

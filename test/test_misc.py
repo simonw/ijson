@@ -8,7 +8,7 @@ from test.test_base import JSON, JSON_EVENTS, JSON_PARSE_EVENTS, JSON_OBJECT,\
 
 
 class Misc(unittest.TestCase):
-    """Miscelaneous unit tests"""
+    """Miscellaneous unit tests"""
 
     def test_common_number_is_deprecated(self):
         with warning_catcher() as warns:

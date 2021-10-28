@@ -43,7 +43,7 @@
 * Moved binary wheel generation
   from GitHub Actions to Travis.
   This gained us binary ARM wheels,
-  wihch are becoming increasingly popular (#35)
+  which are becoming increasingly popular (#35)
 
 ## [3.1.2]
 
@@ -87,13 +87,13 @@
   of the ``yajl2_c`` backend
   (by internally avoiding unnecessary string concatenations).
   Local tests show a performance improvement of up to ~15%,
-  but milage might vary depending on your use case and system.
+  but mileage might vary depending on your use case and system.
 * The "raw" functions ``basic_parse``, ``parse``, ``items`` and ``kvitems``
   can now be used with different types of inputs.
   In particular they accept not only file-like objects,
   but also asynchronous file-like objects,
   behaving like their ``*_async`` counterparts.
-  They also accept ``bytes`` and ``str`` objects direclty
+  They also accept ``bytes`` and ``str`` objects directly
   (and ``unicode`` objects in python 2.7).
   Finally, they also accept iterables,
   in which case they behave like the ``ijson.common.*`` functions,
@@ -103,7 +103,7 @@
   Users should use the ``ijson.*`` routines instead,
   which now accept event iterables.
 * New ``ijson.get_backend`` function
-  for users to import a backend programatically
+  for users to import a backend programmatically
   (without having to manually use importlib).
 * New ``IJSON_BACKEND`` environment variable
   can be used to choose the default backend to be exposed by ijson.
@@ -146,7 +146,7 @@
   under the ``ijson.common`` module (#27).
   These functions take an events iterable instead of a file
   and are backend-independent (which is not great for performance).
-  They were accidentaly removed in the redesign of ijson 3.0,
+  They were accidentally removed in the redesign of ijson 3.0,
   which is why they are coming back.
   In the future they will slowly transition into being
   backend-specific rather than independent.
