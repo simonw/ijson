@@ -7,6 +7,7 @@
   This tool should be useful for new users
   who are usually confused with how to use the library,
   and the prefix in particular.
+* Mark Python 3.10 as explicitly supported.
 
 ## [3.1.4]
 

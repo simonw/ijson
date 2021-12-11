@@ -83,7 +83,8 @@ jobs:
     - python: "3.7"
       env: YAJL_VERSION=none
     - python: "3.8"
-    - python: "3.9-dev"
+    - python: "3.9"
+    - python: "3.10-dev"
 
     #build wheels
     - name: linux wheels build
