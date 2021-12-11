@@ -1,6 +1,6 @@
 # Changelog
 
-## Development version
+## [3.2]
 
 * New ``ijson.dump`` command-line utility
   for simple inspection of the ijson iteration process.
@@ -288,3 +288,4 @@
 [3.1.2.post0]: https://github.com/ICRAR/ijson/releases/tag/v3.1.2.post0
 [3.1.3]: https://github.com/ICRAR/ijson/releases/tag/v3.1.3
 [3.1.4]: https://github.com/ICRAR/ijson/releases/tag/v3.1.4
+[3.2]: https://github.com/ICRAR/ijson/releases/tag/v3.2
